@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query'
 import fetchCharacters from '@/api/fetch-characters'
 import type { Character } from '@/types/common'
 
-const HOUR_IN_MS = 1000 * 60 * 60
+const FIVE_MINUTES_IN_MS = 5 * 60 * 1000
 
 interface Info {
   count: number
@@ -22,7 +22,7 @@ export default function useCharactersQuery(page: number) {
     ['characters', page],
     () => fetchCharacters(page),
     {
-      staleTime: HOUR_IN_MS,
+      staleTime: FIVE_MINUTES_IN_MS,
       keepPreviousData: true,
     }
   )

@@ -1,6 +1,7 @@
 import { dehydrate, QueryClient } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
 
+import type { GetServerSideProps, InferGetServerSidePropsType } from 'next'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 
@@ -9,29 +10,46 @@ import CharactersList from '@/components/characters-list'
 import Pagination from '@/components/pagination'
 import useCharactersQuery from '@/hooks/use-characters-query'
 
+import type { ParsedUrlQuery } from 'querystring'
 import styled from 'styled-components'
 
 const FIRST_PAGE = 1
 const PAGE_SIZE = 20
 
-export async function getStaticProps() {
+const getInitialPageFromQuery = (query: ParsedUrlQuery) => {
+  const page = Number(query.page)
+
+  if (Number.isNaN(page) || page < FIRST_PAGE) {
+    return FIRST_PAGE
+  }
+
+  return page
+}
+
+export const getServerSideProps: GetServerSideProps<{
+  initialPage: number
+}> = async (ctx) => {
   const queryClient = new QueryClient()
 
-  await queryClient.prefetchQuery(['characters', FIRST_PAGE], () =>
-    fetchCharacters(FIRST_PAGE)
+  const page = getInitialPageFromQuery(ctx.query)
+
+  await queryClient.prefetchQuery(['characters', page], () =>
+    fetchCharacters(page)
   )
 
   return {
     props: {
       dehydratedState: dehydrate(queryClient),
+      initialPage: page,
     },
   }
 }
-
-export default function Home() {
-  const [page, setPage] = useState(FIRST_PAGE)
-  const { data, isLoading, isFetching, isError } = useCharactersQuery(page)
+export default function Home({
+  initialPage,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const router = useRouter()
+  const [page, setPage] = useState(initialPage)
+  const { data, isLoading, isFetching, isError } = useCharactersQuery(page)
 
   useEffect(() => {
     router.replace(`/?page=${page}`, undefined, { shallow: true })
