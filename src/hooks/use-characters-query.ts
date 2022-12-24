@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 
-import fetchCharacters from '@/api/fetchCharacters'
+import fetchCharacters from '@/api/fetch-characters'
 import type { Character } from '@/types/common'
 
 const HOUR_IN_MS = 1000 * 60 * 60

@@ -7,6 +7,9 @@ import { useState } from 'react'
 
 import type { AppProps } from 'next/app'
 
+import { GlobalStyle } from '@/styles/global'
+import { ThemeProvider } from '@/theme/theme-provider'
+
 import { Poppins } from '@next/font/google'
 
 const poppins = Poppins({
@@ -25,11 +28,14 @@ export default function App({ Component, pageProps }: AppProps) {
           font-family: ${poppins.style.fontFamily};
         }
       `}</style>
-      <QueryClientProvider client={queryClient}>
-        <Hydrate state={pageProps.dehydratedState}>
-          <Component {...pageProps} />
-        </Hydrate>
-      </QueryClientProvider>
+      <ThemeProvider>
+        <QueryClientProvider client={queryClient}>
+          <Hydrate state={pageProps.dehydratedState}>
+            <GlobalStyle />
+            <Component {...pageProps} />
+          </Hydrate>
+        </QueryClientProvider>
+      </ThemeProvider>
     </>
   )
 }

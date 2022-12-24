@@ -2,8 +2,8 @@ import { dehydrate, QueryClient } from '@tanstack/react-query'
 
 import Head from 'next/head'
 
-import fetchCharacters from '@/api/fetchCharacters'
-import useCharactersQuery from '@/hooks/useCharactersQuery'
+import fetchCharacters from '@/api/fetch-characters'
+import useCharactersQuery from '@/hooks/use-characters-query'
 
 import styled from 'styled-components'
 
@@ -46,12 +46,8 @@ export default function Home() {
         <pre>
           <code>
             {JSON.stringify(
-              data?.results.map(({ gender, id, name, species, url }) => ({
-                id,
+              data?.results.map(({ name }) => ({
                 name,
-                gender,
-                species,
-                url,
               })),
               null,
               2
