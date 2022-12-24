@@ -23,6 +23,7 @@ export default function useCharactersQuery(page: number) {
     () => fetchCharacters(page),
     {
       staleTime: HOUR_IN_MS,
+      keepPreviousData: true,
     }
   )
 }
