@@ -34,9 +34,9 @@
       {
         "groups": [
           ["^\\u0000"], // Side effects.
-          ["^react"], // Packages from node_modules. React-related packages will be first.
+          ["react"], // Packages from node_modules. React-related packages will be first.
           ["^next"], // Packages from node_modules. Next-related packages will be second.
-          ["^[^.]"], // Absolute imports.
+          ["^@/"], // Absolute imports
           ["^\\."] // Relative imports.
         ]
       }
@@ -81,6 +81,7 @@
         "parameter": true
       }
     ],
+    "@typescript-eslint/consistent-type-imports": "warn",
     "no-console": ["error", { "allow": ["warn", "error"] }]
   }
 }
