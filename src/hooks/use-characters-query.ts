@@ -12,7 +12,7 @@ interface Info {
   prev: string
 }
 
-interface CharacterQuery {
+export interface CharacterQuery {
   info: Info
   results: Character[]
 }
