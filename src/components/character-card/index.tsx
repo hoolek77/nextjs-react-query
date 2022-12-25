@@ -2,7 +2,8 @@ import { memo } from 'react'
 
 import NextImage from 'next/image'
 
-import type { Character } from '@/types/common'
+import { EPISODE_PREFIX } from '@/constants/episode'
+import type { Character, Episode } from '@/types/common'
 
 import Tooltip from '../tooltip'
 
@@ -11,19 +12,41 @@ import styled, { css } from 'styled-components'
 interface CharacterCardProps extends Character {
   selected?: boolean
   onSelect: (id: number) => void
+  episodesLength?: number
+  episodesMap?: Record<number, Episode>
 }
 
 export const CHARACTER_CARD_WIDTH = 168
 
 function CharacterCard({
-  episode,
   id,
   name,
   status,
   image,
   selected = true,
   onSelect,
+  episode: characterEpisodes,
+  episodesMap,
+  episodesLength = 0,
 }: CharacterCardProps) {
+  const characterEpisodeNumbers = characterEpisodes.map((episode) =>
+    Number(episode.split(EPISODE_PREFIX)[1])
+  )
+
+  const episodesBySeason = characterEpisodeNumbers.reduce((acc, episode) => {
+    if (!episodesMap || !episodesMap[episode]) return acc
+
+    const [season, episodeNumber] = episodesMap[episode].episode.split('E')
+
+    if (!acc[season]) {
+      acc[season] = []
+    }
+
+    acc[season].push(Number(episodeNumber))
+
+    return acc
+  }, {} as Record<string, number[]>)
+
   return (
     <CharacterCardWrapper selected={selected} onClick={() => onSelect(id)}>
       <ImageWrapper>
@@ -41,16 +64,19 @@ function CharacterCard({
         <CharacterCardInfo>
           <Tooltip
             content={
-              <>
-                <p>Season 1: 1, 2, 3</p>
-                <p>Season 2: 1, 2, 3</p>
-                <p>Season 3: 1, 2, 3</p>
-              </>
+              <TooltipContentWrapper>
+                {Object.entries(episodesBySeason).map(([season, episodes]) => (
+                  <p key={season}>
+                    Season {Number(season.replace('S', ''))}: Episode
+                    {episodes.length > 1 ? 's' : ''} {episodes.join(', ')}
+                  </p>
+                ))}
+              </TooltipContentWrapper>
             }
           >
             <CharacterCardEpisode>
               Played in{' '}
-              {`${episode.length} episode${episode.length > 1 ? 's' : ''}`}
+              {`${episodesLength} episode${episodesLength > 1 ? 's' : ''}`}
             </CharacterCardEpisode>
           </Tooltip>
         </CharacterCardInfo>
@@ -124,4 +150,11 @@ const CharacterCardEpisode = styled.span`
   text-decoration: underline;
   cursor: pointer;
   text-decoration-color: ${({ theme: { colors } }) => colors.primary};
+`
+
+const TooltipContentWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
 `

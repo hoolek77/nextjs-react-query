@@ -1,11 +1,23 @@
 import type { EPISODE_PREFIX } from '@/constants/episode'
 
-type Episode = `${typeof EPISODE_PREFIX}${number}`
+type CharacterEpisode = `${typeof EPISODE_PREFIX}${number}`
 
 export interface Character {
   id: number
   name: string
   status: string
-  episode: Episode[]
+  episode: CharacterEpisode[]
   image: string
+}
+
+export interface Info {
+  count: number
+  next: string | null
+  pages: number
+  prev: string | null
+}
+
+export interface Episode {
+  id: number
+  episode: string
 }

@@ -26,7 +26,7 @@ export default function Tooltip({
 }
 
 const TooltipWrapper = styled.div`
-  max-width: 95%;
+  width: 100%;
   border-radius: 8px;
   background-color: ${({ theme: { colors } }) => colors.neutral};
   padding: 8px 16px;

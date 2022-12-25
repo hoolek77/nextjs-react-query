@@ -1,7 +1,9 @@
 import type { Dispatch, SetStateAction } from 'react'
+import { useMemo } from 'react'
 import { useCallback } from 'react'
 
-import type { CharacterQuery } from '@/hooks/use-characters-query'
+import type { CharactersQuery } from '@/api/fetch-characters'
+import useAllEpisodesQuery from '@/hooks/use-all-episodes-query'
 import type { Character } from '@/types/common'
 
 import CharacterCard, { CHARACTER_CARD_WIDTH } from '../character-card'
@@ -9,7 +11,7 @@ import CharacterCard, { CHARACTER_CARD_WIDTH } from '../character-card'
 import styled from 'styled-components'
 
 interface CharactersListProps {
-  data?: CharacterQuery
+  data?: CharactersQuery
   isLoading: boolean
   isError: boolean
   selectedCharacters: Character['id'][]
@@ -25,6 +27,18 @@ export default function CharactersList({
   selectedCharacters,
   setSelectedCharacters,
 }: CharactersListProps) {
+  const episodes = useAllEpisodesQuery()
+
+  const episodesMap = useMemo(
+    () =>
+      episodes.data?.reduce((acc, episode) => {
+        acc[episode.id] = episode
+
+        return acc
+      }, {} as Record<number, typeof episodes.data[number]>),
+    [episodes.data]
+  )
+
   const handleSelect = useCallback((id: number) => {
     setSelectedCharacters((prev) => {
       if (prev.includes(id)) {
@@ -35,11 +49,11 @@ export default function CharactersList({
     })
   }, [])
 
-  if (isLoading) return <div>Loading...</div>
+  if (isLoading || episodes.isLoading) return <div>Loading...</div>
 
-  if (isError) return <div>Something went wrong!</div>
+  if (isError || episodes.isError) return <div>Something went wrong!</div>
 
-  if (!data) return null
+  if (!data || !episodesMap) return null
 
   return (
     <CharactersListWrapper>
@@ -49,6 +63,8 @@ export default function CharactersList({
           {...character}
           selected={selectedCharacters.includes(character.id)}
           onSelect={handleSelect}
+          episodesLength={episodes.data?.length}
+          episodesMap={episodesMap}
         />
       ))}
     </CharactersListWrapper>
