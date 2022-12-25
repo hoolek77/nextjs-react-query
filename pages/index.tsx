@@ -11,6 +11,7 @@ import Pagination from '@/components/pagination'
 import SearchBar from '@/components/search-bar'
 import useCharactersQuery from '@/hooks/use-characters-query'
 import useDebounce from '@/hooks/use-debounce'
+import type { Character } from '@/types/common'
 
 import type { ParsedUrlQuery } from 'querystring'
 import styled from 'styled-components'
@@ -76,6 +77,9 @@ export default function Home({
   const router = useRouter()
   const [page, setPage] = useState(initialPage)
   const [search, setSearch] = useState(initialSearch)
+  const [selectedCharacters, setSelectedCharacters] = useState<
+    Character['id'][]
+  >([])
   const debouncedSearch = useDebounce(search, 500)
   const { data, isLoading, isFetching, isError } = useCharactersQuery(
     page,
@@ -85,6 +89,7 @@ export default function Home({
   const handleSearchChange = (value: string) => {
     setSearch(value)
     setPage(FIRST_PAGE)
+    setSelectedCharacters([])
   }
 
   useEffect(() => {
@@ -122,7 +127,13 @@ export default function Home({
           pageSize={PAGE_SIZE}
           disabled={isLoading || isFetching}
         />
-        <CharactersList data={data} isLoading={isLoading} isError={isError} />
+        <CharactersList
+          data={data}
+          isLoading={isLoading}
+          isError={isError}
+          selectedCharacters={selectedCharacters}
+          setSelectedCharacters={setSelectedCharacters}
+        />
       </Main>
     </>
   )
@@ -130,6 +141,7 @@ export default function Home({
 
 const Heading = styled.h1`
   font-weight: 500;
+  text-align: center;
 `
 
 const Main = styled.main`

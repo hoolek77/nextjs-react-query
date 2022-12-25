@@ -9,6 +9,7 @@ declare module 'styled-components' {
       background: string
       textPrimary: string
       textSecondary: string
+      success: string
     }
   }
 }
