@@ -32,10 +32,19 @@ export const getServerSideProps: GetServerSideProps<{
   const queryClient = new QueryClient()
 
   const page = getInitialPageFromQuery(ctx.query)
+  const queryKey = ['characters', page]
 
-  await queryClient.prefetchQuery(['characters', page], () =>
-    fetchCharacters(page)
-  )
+  await queryClient.prefetchQuery(queryKey, () => fetchCharacters(page))
+
+  const prefetchedQueryData = queryClient.getQueryData(queryKey)
+
+  if (!prefetchedQueryData) {
+    return {
+      props: {
+        initialPage: FIRST_PAGE,
+      },
+    }
+  }
 
   return {
     props: {
