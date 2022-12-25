@@ -76,7 +76,9 @@ function CharacterCard({
           >
             <CharacterCardEpisode>
               Played in{' '}
-              {`${episodesLength} episode${episodesLength > 1 ? 's' : ''}`}
+              {`${characterEpisodes.length} episode${
+                characterEpisodes.length > 1 ? 's' : ''
+              }`}
             </CharacterCardEpisode>
           </Tooltip>
         </CharacterCardInfo>
