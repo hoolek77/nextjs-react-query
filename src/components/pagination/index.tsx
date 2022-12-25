@@ -26,7 +26,7 @@ export default function Pagination({
 
   return (
     <PaginationNavWrapper>
-      <PaginationList>
+      <PaginationList role="tablist">
         {paginationRange.map((page, index) => (
           <PaginationItem
             key={`${page}-${index}`}

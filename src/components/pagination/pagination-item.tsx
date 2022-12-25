@@ -85,7 +85,7 @@ const PaginationItemButton = styled.button<{
   }
 `
 
-const PaginationDots = styled.li<{ disabled: boolean }>`
+const PaginationDots = styled.div<{ disabled: boolean }>`
   display: flex;
   align-items: center;
   justify-content: center;
