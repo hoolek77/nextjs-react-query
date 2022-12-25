@@ -4,6 +4,8 @@ import NextImage from 'next/image'
 
 import type { Character } from '@/types/common'
 
+import Tooltip from '../tooltip'
+
 import styled, { css } from 'styled-components'
 
 interface CharacterCardProps extends Character {
@@ -37,10 +39,20 @@ function CharacterCard({
         <CharacterCardInfo>{name}</CharacterCardInfo>
         <CharacterCardInfo>{status}</CharacterCardInfo>
         <CharacterCardInfo>
-          <CharacterCardEpisode>
-            Played in{' '}
-            {`${episode.length} episode${episode.length > 1 ? 's' : ''}`}
-          </CharacterCardEpisode>
+          <Tooltip
+            content={
+              <>
+                <p>Season 1: 1, 2, 3</p>
+                <p>Season 2: 1, 2, 3</p>
+                <p>Season 3: 1, 2, 3</p>
+              </>
+            }
+          >
+            <CharacterCardEpisode>
+              Played in{' '}
+              {`${episode.length} episode${episode.length > 1 ? 's' : ''}`}
+            </CharacterCardEpisode>
+          </Tooltip>
         </CharacterCardInfo>
       </CharacterCardInfoWrapper>
     </CharacterCardWrapper>

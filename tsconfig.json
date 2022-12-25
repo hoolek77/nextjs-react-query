@@ -23,6 +23,7 @@
       "@/utils/*": ["src/utils/*"],
       "@/styles/*": ["src/styles/*"],
       "@/theme/*": ["src/theme/*"],
+      "@/constants/*": ["src/constants/*"],
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
