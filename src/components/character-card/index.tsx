@@ -29,7 +29,7 @@ function CharacterCard({
           src={image}
           alt={name}
           fill
-          sizes={`${CHARACTER_CARD_WIDTH}px`}
+          sizes={`${CHARACTER_CARD_WIDTH - 4}px`}
           priority
         />
       </ImageWrapper>
@@ -77,7 +77,7 @@ const CharacterCardWrapper = styled.button<{ selected: boolean }>`
 
 const ImageWrapper = styled.div`
   width: 100%;
-  height: ${CHARACTER_CARD_WIDTH}px;
+  height: ${CHARACTER_CARD_WIDTH - 4}px;
   position: relative;
   border-radius: 8px 8px 0 0;
   position: relative;
