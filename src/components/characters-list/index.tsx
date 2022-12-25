@@ -63,7 +63,6 @@ export default function CharactersList({
           {...character}
           selected={selectedCharacters.includes(character.id)}
           onSelect={handleSelect}
-          episodesLength={episodes.data?.length}
           episodesMap={episodesMap}
         />
       ))}

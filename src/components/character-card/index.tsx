@@ -12,7 +12,6 @@ import styled, { css } from 'styled-components'
 interface CharacterCardProps extends Character {
   selected?: boolean
   onSelect: (id: number) => void
-  episodesLength?: number
   episodesMap?: Record<number, Episode>
 }
 
@@ -27,7 +26,6 @@ function CharacterCard({
   onSelect,
   episode: characterEpisodes,
   episodesMap,
-  episodesLength = 0,
 }: CharacterCardProps) {
   const characterEpisodeNumbers = characterEpisodes.map((episode) =>
     Number(episode.split(EPISODE_PREFIX)[1])
