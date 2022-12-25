@@ -115,6 +115,7 @@ export default function Home({
         <header>
           <Heading>Rick & Morty Pagination</Heading>
         </header>
+        <p>Selected characters: {selectedCharacters.length}</p>
         <SearchBar
           value={search}
           onChange={(value) => handleSearchChange(value)}
