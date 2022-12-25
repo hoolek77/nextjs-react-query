@@ -9,6 +9,7 @@ import fetchCharacters from '@/api/fetch-characters'
 import CharactersList from '@/components/characters-list'
 import Pagination from '@/components/pagination'
 import useCharactersQuery from '@/hooks/use-characters-query'
+import useDebounce from '@/hooks/use-debounce'
 
 import type { ParsedUrlQuery } from 'querystring'
 import styled from 'styled-components'
@@ -34,7 +35,7 @@ export const getServerSideProps: GetServerSideProps<{
   const page = getInitialPageFromQuery(ctx.query)
   const queryKey = ['characters', page]
 
-  await queryClient.prefetchQuery(queryKey, () => fetchCharacters(page))
+  await queryClient.prefetchQuery(queryKey, () => fetchCharacters(page, ''))
 
   const prefetchedQueryData = queryClient.getQueryData(queryKey)
 
@@ -58,11 +59,20 @@ export default function Home({
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const router = useRouter()
   const [page, setPage] = useState(initialPage)
-  const { data, isLoading, isFetching, isError } = useCharactersQuery(page)
+  const [search, setSearch] = useState('')
+  const debouncedSearch = useDebounce(search, 500)
+  const { data, isLoading, isFetching, isError } = useCharactersQuery(
+    page,
+    debouncedSearch
+  )
 
   useEffect(() => {
-    router.replace(`/?page=${page}`, undefined, { shallow: true })
-  }, [page])
+    router.replace(
+      `/?page=${page}${search && `&search=${debouncedSearch}`}`,
+      undefined,
+      { shallow: true }
+    )
+  }, [page, debouncedSearch])
 
   return (
     <>
@@ -74,6 +84,12 @@ export default function Home({
       </Head>
       <main>
         <Heading>Rick & Morty Pagination</Heading>
+        <input
+          type="text"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+        <button onClick={() => setSearch('')}>Clear</button>
         <Pagination
           count={data?.info.count as number}
           currentPage={page}

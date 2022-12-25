@@ -17,13 +17,14 @@ export interface CharacterQuery {
   results: Character[]
 }
 
-export default function useCharactersQuery(page: number) {
+export default function useCharactersQuery(page: number, search: string) {
   return useQuery<CharacterQuery>(
-    ['characters', page],
-    () => fetchCharacters(page),
+    ['characters', page, search],
+    () => fetchCharacters(page, search),
     {
       staleTime: FIVE_MINUTES_IN_MS,
       keepPreviousData: true,
+      retry: false,
     }
   )
 }
