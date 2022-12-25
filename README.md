@@ -1,36 +1,94 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Next.js + react-query pagination project
+
+In this project, I focused on optimizing lists with the useCallback and memo combination and prefetching data on the server with getServerSideProps and queryCache.prefetchQuery.
 
 ## Getting Started
 
-First, run the development server:
+To get started with this project, you'll need to have Node.js and yarn installed on your local machine. Then, follow these steps:
 
 ```bash
-npm run dev
-# or
+git clone {repo_url}
+cd nextjs-react-query
+yarn install
 yarn dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The development server will start and the application will be available at http://localhost:3000.
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+## Learnt Concepts
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+### Optimizing Lists with useCallback and memo
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+Rendering large lists can be slow and inefficient in React. To optimize the performance of a list, you can use the useCallback hook and memo function to avoid unnecessary re-renders.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+Here's an example of how to use these hooks to optimize a list of items:
 
-## Learn More
+```ts
+import { useCallback, memo } from 'react';
 
-To learn more about Next.js, take a look at the following resources:
+// Item.tsx
+function Item({ item, onSelect }) {
+  return (
+    <div onClick={onSelect}>
+      {item.name}
+    </div>
+  );
+}
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+export default memo(Item)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+// List.tsx
+function List({ items }) {
+  const [selectedItems, setSelectedItems] = useState([])
 
-## Deploy on Vercel
+  const handleSelect = useCallback((id: number) => {
+    setSelectedCharacters((prev) => {
+      ...setting logic
+    })
+  }, [])
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+  return (
+    <>
+      {items.map(item => (
+        <MemoizedItem key={item.id} item={item} />
+      ))}
+    </>
+  );
+}
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+## Prefetching Data on the Server with getServerSideProps and queryCache.prefetchQuery
+
+react-query allows you to prefetch data on the server when rendering a page with Next.js. This can improve the performance of your application by reducing the time it takes to load data on the client.
+
+To prefetch data, you can use the getServerSideProps function and the queryCache.prefetchQuery function like this:
+
+```ts
+import { getServerSideProps } from 'next';
+import { queryCache, dehydrate } from 'react-query';
+
+export async function getServerSideProps() {
+  const queryClient = new QueryClient()
+
+  await queryCache.prefetchQuery(['key'], () => fetchData());
+
+  return {
+    props: {
+      dehydratedState: dehydrate(queryClient),
+    },
+  };
+}
+
+export default function Page() {
+  // The data will be available when the page is rendered
+  const { data } = useQuery(['key'], () => fetchData());
+
+  return <div>{data.name}</div>;
+}
+```
+
+## Built With
+
+- [Next.js](https://nextjs.org/)
+- [react-query](https://react-query.tanstack.com/)
+- [TypeScript](https://www.typescriptlang.org/)
