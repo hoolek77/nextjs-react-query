@@ -13,7 +13,7 @@ yarn install
 yarn dev
 ```
 
-The development server will start and the application will be available at http://localhost:3000.
+The development server will start and the application will be available at <http://localhost:3000>.
 
 ## Learnt Concepts
 
