@@ -1,14 +1,13 @@
 # Next.js + react-query pagination project
 
-In this project, I focused on optimizing lists with the useCallback and memo combination and prefetching data on the server with getServerSideProps and queryCache.prefetchQuery.
+In this project, I focused on optimizing lists with the `useCallback` and `memo` combination and prefetching data on the server with `getServerSideProps` and `queryCache.prefetchQuery`.
 
 ## Getting Started
 
 To get started with this project, you'll need to have Node.js and yarn installed on your local machine. Then, follow these steps:
 
 ```bash
-git clone {repo_url}
-cd nextjs-react-query
+# clone repository
 yarn install
 yarn dev
 ```
@@ -24,9 +23,9 @@ Rendering large lists can be slow and inefficient in React. To optimize the perf
 Here's an example of how to use these hooks to optimize a list of items:
 
 ```ts
-import { useCallback, memo } from 'react';
-
 // Item.tsx
+import { memo } from 'react';
+
 function Item({ item, onSelect }) {
   return (
     <div onClick={onSelect}>
@@ -38,6 +37,8 @@ function Item({ item, onSelect }) {
 export default memo(Item)
 
 // List.tsx
+import { memo, useState, useCallback } from 'react';
+
 function List({ items }) {
   const [selectedItems, setSelectedItems] = useState([])
 
@@ -65,7 +66,7 @@ To prefetch data, you can use the getServerSideProps function and the queryCache
 
 ```ts
 import { getServerSideProps } from 'next';
-import { queryCache, dehydrate } from 'react-query';
+import { dehydrate, QueryClient } from '@tanstack/react-query'
 
 export async function getServerSideProps() {
   const queryClient = new QueryClient()
