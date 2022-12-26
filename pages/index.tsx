@@ -122,7 +122,7 @@ export default function Home({
           placeholder="Character name"
         />
         <Pagination
-          count={data?.info.count as number}
+          count={data?.info.count || 0}
           currentPage={page}
           onPageChange={(pageNumber) => setPage(pageNumber)}
           pageSize={PAGE_SIZE}
