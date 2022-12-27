@@ -28,7 +28,7 @@ import { memo } from 'react';
 
 function Item({ item, onSelect }) {
   return (
-    <div onClick={onSelect}>
+    <div onClick={() => onSelect(item.id)}>
       {item.name}
     </div>
   );
