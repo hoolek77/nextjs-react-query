@@ -14,7 +14,7 @@ yarn dev
 
 The development server will start and the application will be available at <http://localhost:3000>.
 
-## Concepts
+## Advanced Concepts
 
 ### Optimizing Lists with useCallback and memo
 
